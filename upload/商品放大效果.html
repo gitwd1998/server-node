@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            text-align: center;
+            min-width: 1000px;
+            margin-top: 100px;
+        }
+
+        .left {
+            display: inline-block;
+            width: 500px;
+            height: 400px;
+            vertical-align: top;
+        }
+
+        .left .pic {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        .left .swiper {
+            width: 100%;
+            height: 100px;
+            background: #cccccc;
+        }
+
+        .left .pic img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .left .shade {
+            cursor: move;
+            /* width: 100px; */
+            /* height: 100px; */
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .right {
+            display: inline-block;
+            width: 400px;
+            height: 400px;
+            text-align: left;
+        }
+
+        .right .pic {
+            width: 400px;
+            height: 400px;
+            position: absolute;
+            display: none;
+            overflow: hidden;
+        }
+
+        .right .pic img {
+            width: 2000px;
+            height: 1200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="left">
+        <div class="pic">
+            <img src="img/akali.jpg" alt="">
+            <span class="shade"></span>
+        </div>
+        <div class="swiper">这里可以是轮播图</div>
+    </div>
+    <div class="right">
+        <div class="pic"><img src="img/akali.jpg" alt=""></div>
+        <ul>
+            <li>商品信息</li>
+            <li>商品信息</li>
+            <li>商品信息</li>
+            <li>商品信息</li>
+        </ul>
+    </div>
+</body>
+<script>
+    var Left = document.getElementsByClassName('left')[0];
+    var Right = document.getElementsByClassName('right')[0];
+    var LeftPic = Left.getElementsByClassName('pic')[0];
+    var RightPic = Right.getElementsByClassName('pic')[0];
+    var Shade = Left.getElementsByClassName('shade')[0];
+    var LeftImg = Left.getElementsByTagName('img')[0];
+    var RightImg = Right.getElementsByTagName('img')[0];
+    LeftPic.onmouseover = function () {
+        Shade.style.display = 'inline-block';
+        RightPic.style.display = 'inline-block';
+        var LeftImgWidth = LeftImg.offsetWidth;//左侧商品图片宽度
+        var LeftImgHeight = LeftImg.offsetHeight;//左侧商品图片高度
+        var RightImgWidth = RightImg.offsetWidth;//右侧商品图片宽度
+        var RightImgHeight = RightImg.offsetHeight;//右侧商品图片高度
+        var RightPicWidth = RightPic.offsetWidth;//右侧图片显示区域的大小
+        var RightPicHeight = RightPic.offsetHeight;//右侧图片显示区域的大小
+        var ScaleWidth = RightImgWidth / LeftImgWidth;//宽度比例
+        var ScaleHeight = RightImgHeight / LeftImgHeight;//高度比例
+        Shade.style.width = RightPicWidth / ScaleWidth + "px";//根据比例算出遮罩层的宽度
+        Shade.style.height = RightPicHeight / ScaleHeight + "px";//根据比例算出遮罩层的高度
+        LeftPic.onmousemove = function (e) {
+            var e = e || event;
+            var x = e.clientX - LeftPic.offsetLeft - Shade.offsetWidth / 2;//遮罩层定位
+            var y = e.clientY - LeftPic.offsetTop - Shade.offsetHeight / 2;//遮罩层定位
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
+            if (x > LeftPic.offsetWidth - Shade.offsetWidth) x = LeftPic.offsetWidth - Shade.offsetWidth;
+            if (y > LeftPic.offsetHeight - Shade.offsetHeight) y = LeftPic.offsetHeight - Shade.offsetHeight;
+            Shade.style.transform = "translate(" + x + "px," + y + "px)";
+            RightImg.style.transform = "translate(-" + x * ScaleWidth + "px,-" + y * ScaleHeight + "px)";
+        }
+    }
+    LeftPic.onmouseout = function () {
+        Shade.style.display = 'none';
+        RightPic.style.display = 'none';
+    }
+</script>
+
+</html>

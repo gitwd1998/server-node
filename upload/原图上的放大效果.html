@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 600px;
+            margin: auto;
+        }
+
+        .pic {
+            width: 600px;
+            height: 350px;
+            position: relative;
+        }
+
+        .goods {
+            width: 100%;
+            height: 100%;
+        }
+
+        .shade {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            left: 0px;
+            top: 0px;
+            display: none;
+            overflow: hidden;
+            cursor: move;
+        }
+
+        .shade img {
+            width: 2000px;
+            height: 1200px;
+        }
+
+        .swiper {
+            height: 100px;
+            background: #cccccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="pic">
+            <img src="img/akali.jpg" alt="" class="goods">
+            <div class="shade"><img src="img/akali.jpg" alt=""></div>
+        </div>
+        <div class="swiper">这里可以是轮播图</div>
+        <ul>
+            <li>商品信息</li>
+            <li>商品信息</li>
+            <li>商品信息</li>
+            <li>商品信息</li>
+        </ul>
+    </div>
+</body>
+<script>
+    var Box = document.getElementsByClassName("box")[0];
+    var Pic = Box.getElementsByClassName("pic")[0];
+    var Goods = Box.getElementsByClassName("goods")[0];
+    var Shade = Box.getElementsByClassName("shade")[0];
+    var Img = Shade.getElementsByTagName("img")[0];
+    Pic.onmouseover = function () {
+        Shade.style.display = "block";
+        var ScaleWidth = Img.offsetWidth / Goods.offsetWidth;//宽度比例
+        var ScaleHeight = Img.offsetHeight / Goods.offsetHeight;//高度比例
+        Pic.onmousemove = function (e) {
+            var e = e || event;
+            var x = e.clientX - Pic.offsetLeft - Shade.offsetWidth / 2;//放大图片显示区域定位
+            var y = e.clientY - Pic.offsetTop - Shade.offsetHeight / 2;//放大图片显示区域定位
+            var a = (e.clientX - Pic.offsetLeft) * ScaleWidth - Shade.offsetWidth / 2;//放大图片定位
+            var b = (e.clientY - Pic.offsetTop) * ScaleHeight - Shade.offsetHeight / 2;//放大图片定位
+            // 遮罩层定位的边界控制
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
+            if (x > Pic.offsetWidth - Shade.offsetWidth) x = Pic.offsetWidth - Shade.offsetWidth;
+            if (y > Pic.offsetHeight - Shade.offsetHeight) y = Pic.offsetHeight - Shade.offsetHeight;
+            // 图片偏移的边界控制
+            if (a < 0) a = 0;
+            if (b < 0) b = 0;
+            if (a > Img.offsetWidth - Shade.offsetWidth) a = Img.offsetWidth - Shade.offsetWidth;
+            if (b > Img.offsetHeight - Shade.offsetHeight) b = Img.offsetHeight - Shade.offsetHeight;
+            Shade.style.transform = "translate(" + x + "px," + y + "px)";
+            Img.style.transform = "translate(-" + a + "px,-" + b + "px)";
+            console.log(x, y)
+            console.log(a, b)
+        }
+    }
+    Pic.onmouseout = function () {
+        Shade.style.display = "none"
+    }
+</script>
+
+</html>
