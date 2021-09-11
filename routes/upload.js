@@ -29,9 +29,9 @@ app.post('/', (req, res, next) => {
   });
 });
 
-app.post('/head', async (req, res, next) => {
+app.post('/avatar', async (req, res, next) => {
   const token = req.headers.authorization
-  const { user, pass, iat, exp } = await getToken(token)
+  const { username, password, iat, exp } = await getToken(token)
   const form = new formidable.IncomingForm({
     encoding: "utf-8",
     uploadDir: "upload",  //文件上传地址
@@ -44,7 +44,7 @@ app.post('/head', async (req, res, next) => {
       url = encodeURI(url)
       data = { url }
       console.log(url);
-      connection.query(`update user set head='${url}' where user='${user}'`, (error, data, fields) => {
+      connection.query(`update user set avatar='${url}' where username='${username}'`, (error, data, fields) => {
         if (error) throw error;
       });
     }

@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken')
 // 秘钥
 const jwtSecret = '110futurenodemongodbvue'
 // 生成token
-exports.generateToken = (user, pass) => {
-  const token = jwt.sign({ user, pass }, jwtSecret, { expiresIn: 24 * 60 * 60 });
+exports.generateToken = (username, password) => {
+  const token = jwt.sign({ username, password }, jwtSecret, { expiresIn: 24 * 60 * 60 });
   return token
 }
 // 获取token

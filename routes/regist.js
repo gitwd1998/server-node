@@ -4,11 +4,11 @@ var connection = require('../mysql');
 
 app.use(express.urlencoded({ extended: false }));
 app.post('/', (req, res) => {
-  let { user, pass, phone } = req.body
-  connection.query(`select * from user where user='${user}'`, (err, data, fields) => {
+  let { username, password, phonenumber } = req.body
+  connection.query(`select * from user where username='${username}'`, (err, data, fields) => {
     if (err) throw err;
     if (data.length) { res.send({ code: '1', msg: '用户名已存在' }) } else {
-      connection.query(`insert into user(user, phone, pass) value('${user}','${phone}','${pass}')`, (err, data, fields) => {
+      connection.query(`insert into user(username, phonenumber, password) value('${username}','${phonenumber}','${password}')`, (err, data, fields) => {
         if (err) throw err;
         res.send({ code: '0', data, msg: '注册成功' })
       })

@@ -44,8 +44,8 @@ app.use((req, res, next) => {
   // 前端请求头中的字段都会转成首字母, 但后端接收到的都是小写
   const token = req.headers.authorization
   getToken(token).then((data) => {
-    const { user, pass, iat, exp } = data
-    connection.query(`select * from user where user='${user}' and pass='${pass}'`, (err, data, fields) => {
+    const { username, password, iat, exp } = data
+    connection.query(`select * from user where username='${username}' and password='${password}'`, (err, data, fields) => {
       if (err) throw err;
       if (!data.length) {
         res.send({ code: 401, msg: '无效的token' })//暂时未作过期处理

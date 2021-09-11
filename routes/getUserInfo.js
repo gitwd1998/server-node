@@ -8,8 +8,8 @@ const { getToken } = require('../utils/jwt')
 app.post('/', (req, res, next) => {
   const { token } = req.body
   getToken(token).then((jwt) => {
-    const { user, pass, iat, exp } = jwt
-    connection.query(`select * from user where user='${user}' and pass='${pass}'`, (err, data, fields) => {
+    const { username, password, iat, exp } = jwt
+    connection.query(`select * from user where username='${username}' and password='${password}'`, (err, data, fields) => {
       if (err) throw err;
       if (data.length) {
         res.send({ code: '0', data: data[0], msg: '查询用户信息成功' })
