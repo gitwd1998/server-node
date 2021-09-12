@@ -10,7 +10,7 @@ const history = require('connect-history-api-fallback');
 app.use(history());//配置history模式
 
 const connection = require('./mysql');
-const { getToken } = require('./utils/jwt')
+const { getToken } = require('./utils/jwt');
 
 // // 自定义跨域中间件
 // const allowCORS = function (req, res, next) {
@@ -34,29 +34,31 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/dist')));
 
 
+
+// 白名单, 不需要进行验证token的api
+const apiwhitelist = ['/captcha', '/login', '/regist'];
+
 // 请求拦截
 app.use((req, res, next) => {
   // 获取当前访问的api地址
-  const url = req._parsedUrl.pathname
-  // 白名单, 不需要进行验证token的api
-  var urlArr = ['/captcha', '/login', '/regist', '/getUserInfo']
-  if (urlArr.includes(url)) return next()
+  const url = req._parsedUrl.pathname;
+  if (apiwhitelist.includes(url)) return next();
   // 前端请求头中的字段都会转成首字母, 但后端接收到的都是小写
-  const token = req.headers.authorization
+  const token = req.headers.authorization;
   getToken(token).then((data) => {
-    const { username, password, iat, exp } = data
+    const { username, password, iat, exp } = data;
     connection.query(`select * from user where username='${username}' and password='${password}'`, (err, data, fields) => {
       if (err) throw err;
       if (!data.length) {
-        res.send({ code: 401, msg: '无效的token' })//暂时未作过期处理
+        res.send({ code: 401, msg: '无效的token' });
       } else {
-        next()
+        next();
       }
-    })
+    });
   }).catch((err) => {
-    res.send(err)
-  })
-})
+    res.send(err);
+  });
+});
 
 
 // 一级路由
