@@ -9,7 +9,7 @@ app.post('/', (req, res, next) => {
   console.log("输出cookies", req.cookies)
   console.log("输出req.body", req.body)
   console.log("输出req.query", req.query)
-  // if (captchatext !== req.cookies.captchatext) return res.send({ code: 3, msg: '验证码错误' })
+  if (captchatext !== req.cookies.captchatext) return res.send({ code: 3, msg: '验证码错误' })
   connection.query(`select * from user where username='${username}'`, (err, data, fields) => {
     if (err) throw err;
     if (data.length) {
